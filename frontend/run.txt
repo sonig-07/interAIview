@@ -1,0 +1,117 @@
+cd backend
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python -m app    #app.py
+
+
+
+cd frontend
+npm install
+npm start
+
+
+
+
+import { useState, useRef } from "react";
+
+export default function Interview() {
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [score, setScore] = useState(null);
+  const [feedback, setFeedback] = useState([]);
+  const recognitionRef = useRef(null);
+
+  const getQuestion = async (section) => {
+    setAnswer("");
+    setScore(null);
+    setFeedback([]);
+
+    const res = await fetch("http://127.0.0.1:5000/api/interview/question", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ section }),
+    });
+
+    const data = await res.json();
+    setQuestion(data.question);
+  };
+
+  const startVoice = () => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert("Speech Recognition not supported");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.onresult = (event) => {
+      setAnswer(event.results[0][0].transcript);
+    };
+
+    recognition.start();
+    recognitionRef.current = recognition;
+  };
+
+  const submitAnswer = async () => {
+    const res = await fetch("http://127.0.0.1:5000/api/interview/answer", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ answer }),
+    });
+
+    const data = await res.json();
+    setScore(data.score);
+    setFeedback(data.feedback);
+  };
+
+  return (
+    <div style={{ padding: "40px", color: "#e5e7eb" }}>
+      <h2>Interview Assistant</h2>
+
+      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+        {["introduction", "technical", "behavioral", "hr", "gd"].map((sec) => (
+          <button key={sec} onClick={() => getQuestion(sec)}>
+            {sec.toUpperCase()}
+          </button>
+        ))}
+      </div>
+
+      {question && (
+        <>
+          <h3>Question</h3>
+          <p>{question}</p>
+
+          <textarea
+            rows="5"
+            value={answer}
+            onChange={(e) => setAnswer(e.target.value)}
+            style={{ width: "100%" }}
+          />
+
+          <div style={{ marginTop: "10px" }}>
+            <button onClick={startVoice}>🎙️ Speak</button>
+            <button onClick={submitAnswer}>Submit</button>
+          </div>
+        </>
+      )}
+
+      {score !== null && (
+        <div style={{ marginTop: "20px" }}>
+          <h3>Score: {score} / 10</h3>
+
+          <ul>
+            {feedback.map((item, idx) => (
+              <li key={idx}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
+      Interview.jsx      inside pages

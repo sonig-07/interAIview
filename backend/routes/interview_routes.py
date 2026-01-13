@@ -1,31 +1,54 @@
+# from flask import Blueprint, request, jsonify
+# from services.resume_parser import extract_text_from_resume
+
+
+# interview_bp = Blueprint("interview", __name__, url_prefix="/api/interview")
+
+# @interview_bp.route("/question", methods=["POST"])
+# def get_question():
+#     data = request.get_json()
+#     section = data.get("section", "introduction")
+
+#     QUESTIONS = {
+#         "introduction": "Tell me about yourself.",
+#         "technical": "Explain REST APIs.",
+#         "behavioral": "How do you handle pressure?",
+#         "hr": "Why should we hire you?",
+#         "gd": "Discuss the impact of AI on jobs."
+#     }
+
+#     return jsonify({
+#         "question": QUESTIONS.get(section, "Tell me about yourself.")
+#     })
+
+
 from flask import Blueprint, request, jsonify
-from backend.services.interview_service import (
-    generate_interview_question,
-    evaluate_answer
-)
 
-interview_bp = Blueprint("interview", __name__, url_prefix="/api")
+interview_bp = Blueprint("interview", __name__, url_prefix="/api/interview")
 
-
-@interview_bp.route("/generate-question", methods=["POST"])
-def generate_question():
-    data = request.json
+@interview_bp.route("/question", methods=["POST"])
+def get_question():
+    data = request.get_json()
     section = data.get("section")
-    resume_text = data.get("resume_text", "")
 
-    question = generate_interview_question(section, resume_text)
+    questions = {
+        "introduction": "Tell me about yourself.",
+        "technical": "Explain React hooks.",
+        "behavioral": "Describe a challenge you faced.",
+        "hr": "Why should we hire you?",
+        "gd": "What is your opinion on AI replacing jobs?"
+    }
 
     return jsonify({
-        "question": question
+        "question": questions.get(section, "No question found")
     })
 
-
-@interview_bp.route("/evaluate-answer", methods=["POST"])
-def evaluate():
-    data = request.json
-    section = data.get("section")
+@interview_bp.route("/answer", methods=["POST"])
+def submit_answer():
+    data = request.get_json()
     answer = data.get("answer")
 
-    evaluation = evaluate_answer(section, answer)
-
-    return jsonify(evaluation)
+    return jsonify({
+        "status": "received",
+        "answer": answer
+    })
