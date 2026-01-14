@@ -34,7 +34,7 @@
 
 
 
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 
 from routes.resume_routes import resume_bp
@@ -52,6 +52,11 @@ CORS(
 # Register blueprints
 app.register_blueprint(resume_bp)
 app.register_blueprint(interview_bp)
+
+@app.route("/")
+def home():
+    return jsonify({"status": "InterAIview backend running"})
+
 
 if __name__ == "__main__":
     app.run(debug=True)

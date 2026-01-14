@@ -1,6 +1,9 @@
 from flask import Blueprint, request, jsonify
 from services.groq_service import ask_groq
 
+from services.interview_evaluator import evaluate_answer
+
+
 interview_bp = Blueprint("interview", __name__, url_prefix="/api/interview")
 
 
@@ -25,3 +28,18 @@ def submit_answer():
         "status": "received",
         "answer": answer
     })
+    
+@interview_bp.route("/evaluate", methods=["POST"])
+def evaluate_interview_answer():
+    data = request.json
+
+    question = data.get("question", "")
+    answer = data.get("answer", "")
+    section = data.get("section", "general")
+
+    feedback = evaluate_answer(question, answer, section)
+
+    return jsonify({
+        "feedback": feedback
+    })
+

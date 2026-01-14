@@ -1,49 +1,28 @@
+from services.groq_service import ask_groq
+
 def evaluate_answer(question, answer, section):
-    score = 0
-    feedback = []
-    strengths = []
-    improvements = []
+    prompt = f"""
+You are an expert interview evaluator.
 
-    words = answer.split()
+Interview Section: {section}
+Question: {question}
+Candidate Answer: {answer}
 
-    # Length check
-    if len(words) >= 30:
-        score += 3
-        strengths.append("Answer is well explained.")
-    else:
-        improvements.append("Try to elaborate your answer more.")
+Evaluate the answer strictly.
 
-    # Keyword relevance (basic)
-    keywords = {
-        "introduction": ["experience", "skills", "background"],
-        "behavioral": ["pressure", "team", "challenge", "handle"],
-        "technical": ["api", "database", "logic", "performance"],
-        "hr": ["company", "role", "growth"],
-        "gd": ["opinion", "agree", "disagree", "reason"]
-    }
+Return output in this exact format:
 
-    section_keywords = keywords.get(section.lower(), [])
-    matched = [k for k in section_keywords if k in answer.lower()]
+Score: X/10
+Strengths:
+- ...
+- ...
 
-    if matched:
-        score += 4
-        strengths.append("Relevant points were mentioned.")
-    else:
-        improvements.append("Answer could be more role-specific.")
+Weaknesses:
+- ...
+- ...
 
-    # Sentence structure
-    if "." in answer:
-        score += 2
-    else:
-        improvements.append("Try framing complete sentences.")
+Suggestions:
+- ...
+"""
 
-    # Tone check
-    if "I" in answer or "my" in answer:
-        score += 1
-
-    return {
-        "score": min(score, 10),
-        "strengths": strengths,
-        "improvements": improvements,
-        "feedback": "Good attempt. Focus on clarity and relevance."
-    }
+    return ask_groq(prompt)
