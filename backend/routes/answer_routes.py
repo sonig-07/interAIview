@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from backend.services.ai_mock_service import generate_text
+from services.ai_mock_service import generate_text
 
 answer_bp = Blueprint("answer", __name__)
 
@@ -32,3 +32,5 @@ def evaluate_answer():
     return jsonify({
         "evaluation": evaluation
     })
+
+

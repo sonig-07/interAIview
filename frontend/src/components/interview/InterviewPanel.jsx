@@ -43,7 +43,7 @@ export default function InterviewPage() {
       }}
     >
       <h2 style={{ fontSize: "24px", marginBottom: "20px" }}>
-        🎤 AI Interview Assistant
+         AI Interview Assistant
       </h2>
 
       <SectionTabs onSelect={getQuestion} />
