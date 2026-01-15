@@ -1,6 +1,6 @@
 
-import InterviewPage from "../components/interview/InterviewPanel";
+import InterviewPanel from "../components/interview/InterviewPanel";
 
 export default function InterviewAssistant() {
-  return <InterviewPage />;
+  return <InterviewPanel />;
 }

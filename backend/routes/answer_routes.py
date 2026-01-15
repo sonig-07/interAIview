@@ -1,5 +1,4 @@
 from flask import Blueprint, request, jsonify
-from services.ai_mock_service import generate_text
 
 answer_bp = Blueprint("answer", __name__)
 

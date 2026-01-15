@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from backend.services.openai_service import generate_text
+from services.groq_service import generate_text
 
 test_bp = Blueprint("test", __name__, url_prefix="/api/test")
 
