@@ -97,15 +97,10 @@ Backend: `http://127.0.0.1:5000`
 
   <img width="1920" height="1017" alt="image" src="https://github.com/user-attachments/assets/89d79a05-44b5-49fe-bd94-0a3d127382fc" />
 
-  <img width="1920" height="1080" alt="Screenshot 2026-01-14 145258" src="https://github.com/user-attachments/assets/ac6136c1-64a5-429c-9670-421948ebb919" />
-
-  
-
-
 
 ---
 
-## 👨‍💻 Author
+##  Author
 
 SoniG07
 
